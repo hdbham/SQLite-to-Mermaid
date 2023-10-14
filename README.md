@@ -23,8 +23,9 @@ Install project dependencies:
 ```bash
 npm install
 ```
-run
+### run
 ```bash
-
+node index.js
+```
 TODO: API Implementation
 The project is designed to be wrapped in an API using Express. This section will be updated with API implementation details.
