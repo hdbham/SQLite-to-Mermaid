@@ -84,13 +84,19 @@ async function main() {
     if (schema) {
       const columns = await getColumnInformation(table.table_name);
       const primaryKeys = await getPrimaryKeyColumns(table.table_name);
+      const foreignKeyColumns = await getForeignKeyColumns(table.table_name);
 
       columns.forEach((column) => {
-        // Replace commas in the data type with spaces
-        const dataType = column.type.replace(/,/g, '-');
-        mermaidDiagram += `        ${column.name} ${dataType}`;
-        if (primaryKeys.includes(column.name)) {
+        const { name, type } = column;
+        const dataType = type.replace(/,/g, '-');
+        const isPrimaryKey = primaryKeys.includes(name);
+        const isForeignKey = foreignKeyColumns.find((fk) => fk.from === name);
+        mermaidDiagram += `        ${name} ${dataType}`;
+        if (isPrimaryKey) {
           mermaidDiagram += ' PK';
+        }
+        if (isForeignKey) {
+          mermaidDiagram += ' FK';
         }
         mermaidDiagram += '\n';
       });
@@ -107,7 +113,7 @@ async function main() {
   }
 
   db.close(() => {
-    fs.writeFileSync('er_diagram.mermaid', mermaidDiagram);
+    fs.writeFileSync('./out/er_diagram.mermaid', mermaidDiagram);
   });
 }
 

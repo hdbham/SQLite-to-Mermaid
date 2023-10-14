@@ -2,7 +2,7 @@ erDiagram
     albums {
         AlbumId INTEGER PK
         Title NVARCHAR(160)
-        ArtistId INTEGER
+        ArtistId INTEGER FK
     }
     artists {
         ArtistId INTEGER PK
@@ -21,14 +21,14 @@ erDiagram
         Phone NVARCHAR(24)
         Fax NVARCHAR(24)
         Email NVARCHAR(60)
-        SupportRepId INTEGER
+        SupportRepId INTEGER FK
     }
     employees {
         EmployeeId INTEGER PK
         LastName NVARCHAR(20)
         FirstName NVARCHAR(20)
         Title NVARCHAR(30)
-        ReportsTo INTEGER
+        ReportsTo INTEGER FK
         BirthDate DATETIME
         HireDate DATETIME
         Address NVARCHAR(70)
@@ -46,20 +46,20 @@ erDiagram
     }
     invoices {
         InvoiceId INTEGER PK
-        CustomerId INTEGER
+        CustomerId INTEGER FK
         InvoiceDate DATETIME
         BillingAddress NVARCHAR(70)
         BillingCity NVARCHAR(40)
         BillingState NVARCHAR(40)
         BillingCountry NVARCHAR(40)
         BillingPostalCode NVARCHAR(10)
-        Total NUMERIC(10 2)
+        Total NUMERIC(10-2)
     }
     invoice_items {
         InvoiceLineId INTEGER PK
-        InvoiceId INTEGER
-        TrackId INTEGER
-        UnitPrice NUMERIC(10 2)
+        InvoiceId INTEGER FK
+        TrackId INTEGER FK
+        UnitPrice NUMERIC(10-2)
         Quantity INTEGER
     }
     media_types {
@@ -71,19 +71,19 @@ erDiagram
         Name NVARCHAR(120)
     }
     playlist_track {
-        PlaylistId INTEGER PK
-        TrackId INTEGER
+        PlaylistId INTEGER PK FK
+        TrackId INTEGER FK
     }
     tracks {
         TrackId INTEGER PK
         Name NVARCHAR(200)
-        AlbumId INTEGER
-        MediaTypeId INTEGER
-        GenreId INTEGER
+        AlbumId INTEGER FK
+        MediaTypeId INTEGER FK
+        GenreId INTEGER FK
         Composer NVARCHAR(220)
         Milliseconds INTEGER
         Bytes INTEGER
-        UnitPrice NUMERIC(10 2)
+        UnitPrice NUMERIC(10-2)
     }
     albums ||--o{ artists : FK
     customers ||--o{ employees : FK
