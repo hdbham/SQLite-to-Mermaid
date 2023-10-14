@@ -16,7 +16,7 @@ git clone https://github.com/hdbham/SQLite-to-Mermaid
 Navigate to the project directory:
 
 ```bash
-cd SQLite-to-mermaid
+cd SQLite-to-Mermaid
 ```
 Install project dependencies:
 
