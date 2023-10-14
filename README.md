@@ -1,4 +1,4 @@
-# SQLlite-to-Mermaid
+# SQLite-to-Mermaid
 
 ## Project Overview
 This Node.js microservice project serves mermaid ERDiagrams from SQLlite BLOBs. It is designed to be wrapped in an API using Express (todo)
@@ -11,12 +11,12 @@ To run this project, you need to have Node.js installed on your machine. You can
 Clone the project repository to your local machine:
 
 ```bash
-git clone https://github.com/hdbham/SQLlite-to-Mermaid
+git clone https://github.com/hdbham/SQLite-to-Mermaid
 ```
 Navigate to the project directory:
 
 ```bash
-cd SQLLite-to-mermaid
+cd SQLite-to-mermaid
 ```
 Install project dependencies:
 
