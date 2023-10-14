@@ -1,4 +1,3 @@
-
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 
@@ -43,23 +42,68 @@ async function main() {
     });
   };
 
+  const getForeignKeyColumns = (tableName) => {
+    return new Promise((resolve, reject) => {
+      db.all(`PRAGMA foreign_key_list(${tableName});`, (err, fks) => {
+        if (err) reject(err);
+        else {
+          const foreignKeyColumns = fks.map((fk) => ({
+            table: fk.table,
+            from: fk.from,
+            to: fk.to,
+          }));
+          resolve(foreignKeyColumns);
+        }
+      });
+    });
+  };
+
+  const getPrimaryKeyColumns = (tableName) => {
+    return new Promise((resolve, reject) => {
+      db.all(`PRAGMA table_info(${tableName});`, (err, columns) => {
+        if (err) reject(err);
+        else {
+          const primaryKeys = columns
+            .filter((column) => column.pk === 1)
+            .map((column) => column.name);
+          resolve(primaryKeys);
+        }
+      });
+    });
+  };
+
   await enableForeignKeySupport();
 
   const tables = await getTableNames();
   let mermaidDiagram = 'erDiagram\n';
 
   for (const table of tables) {
-    mermaidDiagram += `  ${table.table_name} {\n`;
+    mermaidDiagram += `    ${table.table_name} {\n`;
 
     const schema = await getTableSchema(table.table_name);
     if (schema) {
       const columns = await getColumnInformation(table.table_name);
+      const primaryKeys = await getPrimaryKeyColumns(table.table_name);
+
       columns.forEach((column) => {
-        mermaidDiagram += `    ${column.name} ${column.type}\n`;
+        // Replace commas in the data type with spaces
+        const dataType = column.type.replace(/,/g, '-');
+        mermaidDiagram += `        ${column.name} ${dataType}`;
+        if (primaryKeys.includes(column.name)) {
+          mermaidDiagram += ' PK';
+        }
+        mermaidDiagram += '\n';
       });
     }
 
-    mermaidDiagram += '  }\n';
+    mermaidDiagram += '    }\n';
+  }
+
+  for (const table of tables) {
+    const foreignKeyColumns = await getForeignKeyColumns(table.table_name);
+    for (const foreignKey of foreignKeyColumns) {
+      mermaidDiagram += `    ${table.table_name} ||--o{ ${foreignKey.table} : FK\n`;
+    }
   }
 
   db.close(() => {
