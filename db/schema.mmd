@@ -1,0 +1,109 @@
+graph TD
+  subgraph albums
+    albums
+  subgraph sqlite_sequence
+    sqlite_sequence
+  subgraph artists
+    artists
+  subgraph customers
+    customers
+  subgraph employees
+    employees
+  subgraph genres
+    genres
+  subgraph invoices
+    invoices
+  subgraph invoice_items
+    invoice_items
+  subgraph media_types
+    media_types
+  subgraph playlists
+    playlists
+  subgraph playlist_track
+    playlist_track
+  subgraph tracks
+    tracks
+  subgraph sqlite_stat1
+    sqlite_stat1
+    albums -->|AlbumId: INTEGER| AlbumId
+    albums -->|Title: NVARCHAR(160)| Title
+    albums -->|ArtistId: INTEGER| ArtistId
+  end
+    genres -->|GenreId: INTEGER| GenreId
+    genres -->|Name: NVARCHAR(120)| Name
+  end
+    artists -->|ArtistId: INTEGER| ArtistId
+    artists -->|Name: NVARCHAR(120)| Name
+  end
+    customers -->|CustomerId: INTEGER| CustomerId
+    customers -->|FirstName: NVARCHAR(40)| FirstName
+    customers -->|LastName: NVARCHAR(20)| LastName
+    customers -->|Company: NVARCHAR(80)| Company
+    customers -->|Address: NVARCHAR(70)| Address
+    customers -->|City: NVARCHAR(40)| City
+    customers -->|State: NVARCHAR(40)| State
+    customers -->|Country: NVARCHAR(40)| Country
+    customers -->|PostalCode: NVARCHAR(10)| PostalCode
+    customers -->|Phone: NVARCHAR(24)| Phone
+    customers -->|Fax: NVARCHAR(24)| Fax
+    customers -->|Email: NVARCHAR(60)| Email
+    customers -->|SupportRepId: INTEGER| SupportRepId
+  end
+    media_types -->|MediaTypeId: INTEGER| MediaTypeId
+    media_types -->|Name: NVARCHAR(120)| Name
+  end
+    invoices -->|InvoiceId: INTEGER| InvoiceId
+    invoices -->|CustomerId: INTEGER| CustomerId
+    invoices -->|InvoiceDate: DATETIME| InvoiceDate
+    invoices -->|BillingAddress: NVARCHAR(70)| BillingAddress
+    invoices -->|BillingCity: NVARCHAR(40)| BillingCity
+    invoices -->|BillingState: NVARCHAR(40)| BillingState
+    invoices -->|BillingCountry: NVARCHAR(40)| BillingCountry
+    invoices -->|BillingPostalCode: NVARCHAR(10)| BillingPostalCode
+    invoices -->|Total: NUMERIC(10,2)| Total
+  end
+    playlist_track -->|PlaylistId: INTEGER| PlaylistId
+    playlist_track -->|TrackId: INTEGER| TrackId
+  end
+    tracks -->|TrackId: INTEGER| TrackId
+    tracks -->|Name: NVARCHAR(200)| Name
+    tracks -->|AlbumId: INTEGER| AlbumId
+    tracks -->|MediaTypeId: INTEGER| MediaTypeId
+    tracks -->|GenreId: INTEGER| GenreId
+    tracks -->|Composer: NVARCHAR(220)| Composer
+    tracks -->|Milliseconds: INTEGER| Milliseconds
+    tracks -->|Bytes: INTEGER| Bytes
+    tracks -->|UnitPrice: NUMERIC(10,2)| UnitPrice
+  end
+    sqlite_stat1 -->|tbl: | tbl
+    sqlite_stat1 -->|idx: | idx
+    sqlite_stat1 -->|stat: | stat
+  end
+    employees -->|EmployeeId: INTEGER| EmployeeId
+    employees -->|LastName: NVARCHAR(20)| LastName
+    employees -->|FirstName: NVARCHAR(20)| FirstName
+    employees -->|Title: NVARCHAR(30)| Title
+    employees -->|ReportsTo: INTEGER| ReportsTo
+    employees -->|BirthDate: DATETIME| BirthDate
+    employees -->|HireDate: DATETIME| HireDate
+    employees -->|Address: NVARCHAR(70)| Address
+    employees -->|City: NVARCHAR(40)| City
+    employees -->|State: NVARCHAR(40)| State
+    employees -->|Country: NVARCHAR(40)| Country
+    employees -->|PostalCode: NVARCHAR(10)| PostalCode
+    employees -->|Phone: NVARCHAR(24)| Phone
+    employees -->|Fax: NVARCHAR(24)| Fax
+    employees -->|Email: NVARCHAR(60)| Email
+  end
+    sqlite_sequence -->|name: | name
+    sqlite_sequence -->|seq: | seq
+  end
+    invoice_items -->|InvoiceLineId: INTEGER| InvoiceLineId
+    invoice_items -->|InvoiceId: INTEGER| InvoiceId
+    invoice_items -->|TrackId: INTEGER| TrackId
+    invoice_items -->|UnitPrice: NUMERIC(10,2)| UnitPrice
+    invoice_items -->|Quantity: INTEGER| Quantity
+  end
+    playlists -->|PlaylistId: INTEGER| PlaylistId
+    playlists -->|Name: NVARCHAR(120)| Name
+  end
