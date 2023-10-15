@@ -31,6 +31,9 @@ node index.js
 TODO: API Implementation
 The project is designed to be wrapped in an API using Express. This section will be updated with API implementation details.
 
+```bash
+curl -X POST -F "{path to sqllite file}" http://{server ip}:8809/upload
+```
 
 Example Schema 
 ```mermaid
