@@ -8,7 +8,7 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3');
 
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
 
 app.post('/upload', upload.single('sqlFile'), async (req, res) => {
   try {
