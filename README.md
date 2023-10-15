@@ -28,13 +28,14 @@ npm install
 ```bash
 node index.js
 ```
-TODO: API Implementation
-The project is designed to be wrapped in an API using Express. This section will be updated with API implementation details.
-
-```bash
-curl -X POST -F "{path to sqllite file}" http://{server ip}:8809/upload
-```
-
+### API Endpoints
+#### POST /upload
+- Description: Upload an SQLite file to generate a Mermaid diagram.
+- Request:
+    - Body: The request should include a file named sqlFile.
+- Response:
+    -Success: Returns a Mermaid diagram in the response.
+---
 Example Schema 
 ```mermaid
 erDiagram
