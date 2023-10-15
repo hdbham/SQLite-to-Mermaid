@@ -1,9 +1,39 @@
-const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const express = require('express');
+const app = express();
+const PORT = 8809;
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Store uploaded files in the 'uploads' directory
+const cors = require('cors');
+const sqlite3 = require('sqlite3');
 
-const dbFilePath = './db/chinook.db';
+app.use(express.json());
+app.use(cors());
 
-async function main() {
+app.post('/upload', upload.single('sqlFile'), async (req, res) => {
+  try {
+    if (!req.file) {
+      throw new Error('Request does not contain a file.');
+    }
+
+    const dbFilePath = req.file.path;
+
+    // Process the SQL file and generate the Mermaid diagram
+    const md = generateMermaidDiagram(dbFilePath);
+    console.log(md + ' generated');
+
+    res.send(md);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+const generateMermaidDiagram = async (dbFilePath) => {
   const db = new sqlite3.Database(dbFilePath);
 
   const enableForeignKeySupport = () => {
@@ -114,9 +144,9 @@ async function main() {
 
   db.close(() => {
     fs.writeFileSync('./out/er_diagram.mermaid', mermaidDiagram);
+    //delete temporary db file
+    fs.unlink(dbFilePath, (err) =>
+    {if (err) throw err;});
   });
+  return mermaidDiagram;
 }
-
-main().catch((err) => {
-  console.error(err);
-});
