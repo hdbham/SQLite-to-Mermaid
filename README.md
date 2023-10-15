@@ -5,6 +5,16 @@
 This Node.js microservice project serves mermaid ERDiagrams from SQLlite BLOBs. It is designed to be wrapped in an API using Express (todo)
 Currently it outputs ERDs in ./out/ these can be tested via https://mermaid.live
 
+
+### API Endpoints
+#### POST /upload
+- Description: Upload an SQLite file to generate a Mermaid diagram.
+- Request:
+    - Body: The request should include a file named sqlFile.
+- Response:
+    -Success: Returns a Mermaid diagram in the response.
+---
+
 ### Prerequisites
 To run this project, you need to have Node.js installed on your machine. You can download it from nodejs.org.
 
@@ -28,14 +38,6 @@ npm install
 ```bash
 node index.js
 ```
-### API Endpoints
-#### POST /upload
-- Description: Upload an SQLite file to generate a Mermaid diagram.
-- Request:
-    - Body: The request should include a file named sqlFile.
-- Response:
-    -Success: Returns a Mermaid diagram in the response.
----
 Example Schema 
 ```mermaid
 erDiagram
