@@ -16,19 +16,18 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.post('/upload', upload.single('sqlFile'), async (req, res) => {
   try {
     if (!req.file) {
       throw new Error('Request does not contain a file.');
     }
+
     const dbFilePath = req.file.path;
 
     // Process the SQL file and generate the Mermaid diagram
     const md = await generateMermaidDiagram(dbFilePath);
     console.log(md + ' generated');
 
-    // returns the diagram as a ...?
     res.status(200).send(md);
   } catch (error) {
     console.error(error);
