@@ -9,10 +9,12 @@ const sqlite3 = require('sqlite3');
 
 app.use(express.json());
 app.use(cors());
+
+
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    // You can add more headers as needed (e.g., Access-Control-Allow-Methods, Access-Control-Allow-Headers).
-    next();
+  // set dynamically via the current URL's origin: 
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  next();
 });
 
 app.post('/upload', upload.single('sqlFile'), async (req, res) => {
@@ -21,10 +23,11 @@ app.post('/upload', upload.single('sqlFile'), async (req, res) => {
       throw new Error('Request does not contain a file.');
     }
 
-    const dbFilePath = req.file.path;
+    // Convert buffer to string
+    const sqlFileContent = req.file.buffer.toString();
 
-    // Process the SQL file and generate the Mermaid diagram
-    const md = await generateMermaidDiagram(dbFilePath);
+    // Process the SQL file content and generate the Mermaid diagram
+    const md = await generateMermaidDiagram(sqlFileContent);
     console.log(md + ' generated');
 
     res.status(200).send(md);
@@ -33,6 +36,7 @@ app.post('/upload', upload.single('sqlFile'), async (req, res) => {
     res.status(500).send('An error occurred');
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
@@ -123,8 +127,8 @@ const generateMermaidDiagram = async (dbFilePath) => {
 
       columns.forEach((column) => {
         const { name, type } = column;
-         let dataType = type.replace(/,/g, '-') || "UNDEFINED";
-       
+        let dataType = type.replace(/,/g, '-') || "UNDEFINED";
+
         const isPrimaryKey = primaryKeys.includes(name);
         const isForeignKey = foreignKeyColumns.find((fk) => fk.from === name);
         mermaidDiagram += `        ${name} ${dataType}`;
@@ -136,7 +140,7 @@ const generateMermaidDiagram = async (dbFilePath) => {
         }
         mermaidDiagram += '\n';
         dataType = null;
-      });      
+      });
     }
 
     mermaidDiagram += '    }\n';
@@ -152,8 +156,7 @@ const generateMermaidDiagram = async (dbFilePath) => {
   db.close(() => {
     fs.writeFileSync('./out/er_diagram.mermaid', mermaidDiagram);
     //delete temporary db file
-    fs.unlink(dbFilePath, (err) =>
-    {if (err) throw err;});
+    fs.unlink(dbFilePath, (err) => { if (err) throw err; });
   });
   return mermaidDiagram;
 }
