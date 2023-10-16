@@ -8,7 +8,12 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3');
 
 app.use(express.json());
-//app.use(cors());
+app.use(cors());
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+    // You can add more headers as needed (e.g., Access-Control-Allow-Methods, Access-Control-Allow-Headers).
+    next();
+});
 
 app.post('/upload', upload.single('sqlFile'), async (req, res) => {
   try {
@@ -19,10 +24,10 @@ app.post('/upload', upload.single('sqlFile'), async (req, res) => {
     const dbFilePath = req.file.path;
 
     // Process the SQL file and generate the Mermaid diagram
-    const md = generateMermaidDiagram(dbFilePath);
+    const md = await generateMermaidDiagram(dbFilePath);
     console.log(md + ' generated');
 
-    res.send(md);
+    res.status(200).send(md);
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
@@ -123,10 +128,10 @@ const generateMermaidDiagram = async (dbFilePath) => {
         const isForeignKey = foreignKeyColumns.find((fk) => fk.from === name);
         mermaidDiagram += `        ${name} ${dataType}`;
         if (isPrimaryKey) {
-          mermaidDiagram += ' PK';
+          mermaidDiagram += '-[PK]';
         }
         if (isForeignKey) {
-          mermaidDiagram += ' FK';
+          mermaidDiagram += '-[FK]';
         }
         mermaidDiagram += '\n';
       });
