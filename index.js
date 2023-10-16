@@ -123,7 +123,8 @@ const generateMermaidDiagram = async (dbFilePath) => {
 
       columns.forEach((column) => {
         const { name, type } = column;
-        const dataType = type.replace(/,/g, '-');
+         let dataType = type.replace(/,/g, '-') || "UNDEFINED";
+       
         const isPrimaryKey = primaryKeys.includes(name);
         const isForeignKey = foreignKeyColumns.find((fk) => fk.from === name);
         mermaidDiagram += `        ${name} ${dataType}`;
@@ -134,7 +135,8 @@ const generateMermaidDiagram = async (dbFilePath) => {
           mermaidDiagram += '-[FK]';
         }
         mermaidDiagram += '\n';
-      });
+        dataType = null;
+      });      
     }
 
     mermaidDiagram += '    }\n';
